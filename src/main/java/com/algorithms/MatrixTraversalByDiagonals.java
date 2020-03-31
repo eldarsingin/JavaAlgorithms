@@ -1,45 +1,33 @@
 package com.algorithms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 public class MatrixTraversalByDiagonals {
 
     public String traverse(final int R, int C, int[][] matrix) {
-
-        List<Integer> results = new ArrayList<>();
-        boolean reverse = true;
+        String results = "";
         for (int i = 0; i < R; i++) {
-            results.addAll(extractDiagonal(reverse, i, 0, C, matrix));
-            reverse = !reverse;
+            results += extractDiagonal(i, 0, C, matrix);
         }
 
         for (int j = 1; j < C; j++) {
-            results.addAll(extractDiagonal(reverse, R - 1, j, C, matrix));
-            reverse = !reverse;
+            results += extractDiagonal(R - 1, j, C, matrix);
         }
 
-        return results.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(" "));
+        return results.trim();
     }
 
-    private List<Integer> extractDiagonal(boolean reverse, int x, int y, int C, int[][] matrix) {
-        List<Integer> diagonal = new ArrayList<>();
+    private String extractDiagonal(final int i, final int j, final int C, final int[][] matrix) {
+        int x = i;
+        int y = j;
+        String result = "";
         while (x >= 0 && y < C ) {
-            if(!reverse){
-                diagonal.add(matrix[x][y]);
+            if((i + j) % 2 == 0){
+                result = matrix[x][y] + " " + result;
             } else {
-                diagonal.add(0, matrix[x][y]);
+                result += matrix[x][y] + " ";
             }
             x--;
             y++;
         }
-        return diagonal;
+        return result;
     }
 }
