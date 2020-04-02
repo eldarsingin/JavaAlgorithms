@@ -1,44 +1,37 @@
 package com.algorithms;
 
-import java.util.function.BiPredicate;
-
 public class IntegerPrinter {
 
     public void printAsHashesAndAsterixes(final int number) {
-        boolean alternate = false;
         int half = number / 2 + number % 2;
 
-        for (int i = 1; i <= half; i++) {
-            printLine(getLine(alternate, number, i, (j, lineNumber) -> j.intValue() <= lineNumber));
-            alternate = !alternate;
-        }
-
-        for (int i = half; i < number; i++) {
-            printLine(getLine(alternate, number, i, (j, lineNumber) -> (j > lineNumber)));
-            alternate = !alternate;
+        for (int i = 1; i <= number; i++) {
+            int starsToPrint = i;
+            if(i > half){
+                starsToPrint = number - i + 1;
+            }
+            printLine(getLine(number, i, starsToPrint));
         }
     }
 
-    private String getLine(boolean alternate, int number, int lineNumber, BiPredicate<Integer, Integer> predicate) {
-        String line = "";
+    private String getLine(final int number, final int lineNumber, final int starsToPrint) {
+        StringBuilder line = printSymbolTimes('*', starsToPrint);
+        StringBuilder hashes = printSymbolTimes('#', number - starsToPrint);
 
-        for (int j = 1; j <= number; j++) {
-            if (predicate.test(j, lineNumber)) {
-                if (alternate) {
-                    line += "*";
-                } else {
-                    line = "*" + line;
-                }
-
-            } else {
-                if (alternate) {
-                    line = "#" + line;
-                } else {
-                    line += "#";
-                }
-            }
+        if (lineNumber % 2 == 0) {
+            line.insert(0, hashes);
+        } else {
+            line.append(hashes);
         }
-        return line;
+        return line.toString();
+    }
+
+    private StringBuilder printSymbolTimes(char symbol, int starsToPrint) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < starsToPrint; i++) {
+            result.append(symbol);
+        }
+        return result;
     }
 
     protected void printLine(final String line) {
